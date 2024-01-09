@@ -1,4 +1,7 @@
 
 #nav-logo {
-    height: 30px;
+    height: 5vh;
+}
+.navbar {
+    height: 10vh; 
 }

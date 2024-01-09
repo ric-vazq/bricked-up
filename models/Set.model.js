@@ -8,7 +8,8 @@ const setSchema = new Schema ({
     imgUrl: {
         type: String
     },
-    parts: [{ type: Schema.Types.ObjectId }]
+    parts: [{ type: Schema.Types.ObjectId, ref: 'Part' }],
+    owner: [{ type: Schema.Types.ObjectId, ref: 'User'}]
 });
 
 const Set = model('Set', setSchema);
