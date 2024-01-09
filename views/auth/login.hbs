@@ -1,24 +1,38 @@
-<div id="login-form">
-  <h2>Log In</h2>
-  <form action="/auth/login" method="POST">
 
-    <label> Username
-      <input type="text" name="username" placeholder="Your username" />
-    </label>
+<div class="container-lg my-5">
+  <div class="text-center">
+    <h2>Log In</h2>
+  </div>
 
-    <label> Email
-      <input type="email" name="email" placeholder="Your email" />
-    </label>
+  <div class="row justify-content-center my-5">
+    <div class="col-lg-6">
+      <form action="/auth/login" method="POST" class="d-flex flex-column justify-content-center">
+ 
+        <label class="form-label">Username</label>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="bi bi-person-circle" style="color: black"></i>
+          </span>
+          <input class="form-control" type="text" name="username" placeholder="ironhacker" />
+        </div>
 
-    <label> Password
-      <input type="password" name="password" placeholder="Your password" />
-    </label>
+        <label class="form-label">Password</label>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="bi bi-eye-slash-fill"></i>
+          </span>
+          <input class="form-control" type="password" name="password" placeholder="********" />
+        </div>
+        
+    
+        {{#if errorMessage}}
+        <p style="color: red">{{errorMessage}}</p>
+        {{/if}}
+ 
+        <button class="btn btn-dark" type="submit">Login</button>
+      </form>
+    </div>
 
-    <button type="submit">Log In</button>
-
-
-    {{#if errorMessage}}
-      <p class="error">{{errorMessage}}</p>
-    {{/if}}
-  </form>
+  </div>
+  
 </div>
