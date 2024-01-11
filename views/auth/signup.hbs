@@ -5,30 +5,39 @@
     <h2>Sign Up</h2>
   </div>
 
-  <div class="row justify-content-center my-5">
+  <div class="row justify-content-center my-3">
     <div class="col-lg-6">
       <form action="/auth/signup" method="POST" style="" class="d-flex flex-column justify-content-center">
- 
-      <div class="mb-3">
+        
         <label class="form-label">Username</label>
-        <input class="form-control" type="text" name="username" placeholder="ironhacker" />
-      </div>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="bi bi-person-circle" style="color: black"></i>
+          </span>
+          <input class="form-control" type="text" name="username" placeholder="ironhacker" />
+        </div>
 
-      <div class="mb-3">
         <label class="form-label">Email</label>
-        <input class="form-control" type="email" name="email" placeholder="ironhacker@test.com" />
-      </div>
- 
-      <div class="mb-3">
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="bi bi-envelope-at-fill" style="color: black"></i>
+          </span>
+          <input class="form-control" type="email" name="email" placeholder="ironhacker@test.com" />
+        </div>
+        
         <label class="form-label">Password</label>
-        <input class="form-control" type="password" name="password" placeholder="********" />
-      </div>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="bi bi-eye-slash-fill"></i>
+          </span>
+          <input class="form-control" type="password" name="password" placeholder="********" />
+        </div>
     
         {{#if errorMessage}}
         <p style="color: red">{{errorMessage}}</p>
         {{/if}}
  
-        <button class="btn btn-dark" type="submit">Create an account</button>
+        <button class="btn btn-danger" type="submit">Create an account</button>
       </form>
     </div>
   </div>
