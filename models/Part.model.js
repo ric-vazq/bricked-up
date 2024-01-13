@@ -9,10 +9,6 @@ const partSchema = new Schema ({
         type: String,
         required: true
     },
-    quantity: {
-        type: Number,
-        required: true
-    },
     imgUrl: {
         type: String,
         required: true
