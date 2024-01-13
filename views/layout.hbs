@@ -26,9 +26,14 @@
           <li class="nav-item">
             <a class="nav-link" href="/auth/signup">Sign Up</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
+          {{#if userInSession}}
+        <li class="nav-item">
+          <a class="nav-link" href="/user/profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/logout">Log Out</a>
+        </li>
+        {{/if}}
         </ul>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -54,7 +59,6 @@
         </li>
         <li class="ms-3">
           <i class="bi bi-twitter"></i>
-        </li>
       </ul>
     </footer>
   </div>
