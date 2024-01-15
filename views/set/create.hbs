@@ -1,0 +1,30 @@
+<h2>Create a movie</h2>
+<div class="row">
+  <div class="col-md-6">
+    <form action="/set/create" method="post" enctype="multipart/form-data"> {{!-- !!! --}}
+      <div class="form-group">
+        <label>Name:
+          <input type="text" name="name" class="form-control" />
+        </label>
+      </div>
+ 
+      <div class="form-group">
+        <label for="parts">Parts:
+          <select name="parts" class="form-multi-select" multiple data-coreui-search="true"> 
+            {{#each parts}}
+            <option value="{{_id}}">{{name}}, {{color}}</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+ 
+      <div class="form-group">
+        <label>Image:
+          <input type="file" name="set-image" class="form-control-file" />
+        </label>
+      </div>
+ 
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>
