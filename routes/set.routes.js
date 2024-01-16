@@ -27,6 +27,19 @@ router.post("/create", fileUploader.single('set-image'), (req, res, next) => {
     .catch(err => next(err))
 })
 
-router.get("/info/:id")
+router.get("/info/:id", (req, res, next) => {
+    const { id } = req.params; 
+    Set.findById(id)
+        .populate('parts')
+        .then(set => res.render("set/info", {userInSession: req.session.currentUser}))
+        .catch(err => next(err));
+})
+
+router.post("/info/:id/delete", (req, res, next) => {
+    const { id } = req.params; 
+    Set.findByIdAndDelete(id)
+    .then(() => res.redirect("/user/profile"))
+    .catch(err => next(err));
+})
 
 module.exports = router;
