@@ -6,11 +6,11 @@ const Set = require("../models/Set.model")
 const Part = require("../models/Part.model")
 
 router.get("/profile", isLoggedIn, (req, res, next) => {
-    console.log(req.session.currentUser);
-    User.findById(req.session.currentUser._id).populate('favoriteBuilds')
-    .then(foundUser => {
-        let sets = foundUser.favoriteBuilds; 
-        return res.render("user/profile", { userInSession: req.session.currentUser, mySets: sets })
+    Set.find().populate('creators')
+    .then(foundSets => {
+        console.log(req.session.currentUser);
+        const userSets = foundSets.filter(set => set.creators[0].username === req.session.currentUser.username)
+        return res.render("user/profile", { userInSession: req.session.currentUser, mySets: userSets })
     })
     .catch(err => next(err));
     
