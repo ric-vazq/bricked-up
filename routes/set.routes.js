@@ -31,7 +31,9 @@ router.get("/info/:id", (req, res, next) => {
     const { id } = req.params; 
     Set.findById(id)
         .populate('parts')
-        .then(set => res.render("set/info", {userInSession: req.session.currentUser}))
+        .then(setInfo => {
+            return res.render("set/info", {userInSession: req.session.currentUser, set: setInfo})
+        })
         .catch(err => next(err));
 })
 

@@ -1,18 +1,19 @@
-<div class="row featurette">
+
+<div class="row">
     <div class="col-md-7">
         <h2 class="featurette-heading">
-            {{name}}
+            {{set.name}}
         </h2>
-        <p class="lead">{{instructions}}</p>
+        <p class="lead">{{set.instructions}}</p>
     </div>
     <div class="col-md-5">
-        <img src="{{imgUrl}}" alt="" class="featurette-image img-fluid mx-auto" style="width: 500px; height: 500px;">
+        <img src="{{set.imgUrl}}" alt="" class="featurette-image img-fluid mx-auto" style="width: 500px; height: 500px;">
     </div>
 </div>
 <hr class="featurette-divider" style="margin: 5rem 0;">
 <div class="container marketing">
     <div class="row">
-        {{#each parts}}
+        {{#each set.parts}}
             <div class="col-lg-4">
                 <img src="{{this.imgUrl}}" alt="" class="rounded-circle">
                 <h2>{{this.name}}</h2>
