@@ -1,0 +1,44 @@
+{{#if userInSession}}
+<div class="container my-5">
+<div class="row row-cols-1 row-cols-md-2 text-center">
+    <div class="col">
+        <div class="card-body mb-4 p-5 rounded-3 bg-danger shadow-sm">
+            <img class="img-thumbnail border-3 border-dark rounded-circle" src="{{userInSession.profilePicture}}" style="height: 100px; width: 100px" alt="">
+            <h2>Welcome, {{ userInSession.username }}!</h2>
+            <button class="btn btn-dark rounded-pill border-3 border-warning"><a class="nav-link" href="/user/edit-profile">Edit Profile</a></button>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card-body mb-4 p-5 rounded-3 bg-warning shadow-sm">
+            <h2>Feel Inspired?</h2>
+            <button class="btn btn-danger rounded-pill border-3 border-dark"><a class="nav-link" href="/set/create">Add New Set</a></button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="album py-5 bg-body-tertiary">
+    <h1 class="text-center pb-5">My Sets</h1>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {{#each mySets}}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img class="bd-placeholder-img card-img-top" src="{{this.imgUrl}}" width="100%" height="225" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+                    <div class="card-body bg-dark">
+                        <p class="card-text text-white">{{this.name}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-warning"><a class="nav-link" href="/set/info/{{this._id}}">View</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+{{else}}
+<p>Still no logged in user, sorry!</p>
+{{/if}}

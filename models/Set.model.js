@@ -10,7 +10,9 @@ const setSchema = new Schema ({
     },
     parts: [{ type: Schema.Types.ObjectId, ref: 'Part' }],
     creators: [{ type: Schema.Types.ObjectId, ref: 'User'}],
-    instructions: [ String ]
+    instructions: {
+        type: String
+    }
 });
 
 const Set = model('Set', setSchema);
