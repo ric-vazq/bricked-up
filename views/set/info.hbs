@@ -1,22 +1,28 @@
-<div class="row featurette">
-    <div class="col-md-7">
-        <h2 class="featurette-heading">
-            {{name}}
-        </h2>
-        <p class="lead">{{instructions}}</p>
+<div class="bg-dark pt-3 px-3 px-md-5 text-center text-white">
+    <div class="my-3 py-3">
+        <h2 class="display-5">{{set.name}}</h2>
+        <p class="lead">{{set.instructions}}</p>
     </div>
-    <div class="col-md-5">
-        <img src="{{imgUrl}}" alt="" class="featurette-image img-fluid mx-auto" style="width: 500px; height: 500px;">
+    <img src="{{set.imgUrl}}" alt="" class="img-fluid mx-auto" style="height: 300px; width: auto; border-radius: 21px">
+    <div class="my-3 py-3">
+        <h2 class="display-5">Parts</h2>
     </div>
-</div>
-<hr class="featurette-divider" style="margin: 5rem 0;">
-<div class="container marketing">
-    <div class="row">
-        {{#each parts}}
-            <div class="col-lg-4">
-                <img src="{{this.imgUrl}}" alt="" class="rounded-circle">
+    <div class="row my-3 py-3">
+        {{#each set.parts}}
+            <div class="col-lg-4 mb-5">
+                <img src="{{this.imgUrl}}" alt="" class="" style="height: 200px; width: 200px; border-radius: 21px;">
                 <h2>{{this.name}}</h2>
             </div>
         {{/each}}
     </div>
+    <div class="container-sm d-flex justify-content-around align-items-center pb-5">
+        <form action="/set/info/{{set._id}}/edit" method="GET">
+            <button class="btn btn-lg btn-outline-warning">Edit</button>
+        </form>
+        <form action="/set/info/{{set._id}}/delete" method="POST">
+            <button class="btn btn-lg btn-outline-danger">Delete</button>
+        </form>
+    </div>
 </div>
+
+    

@@ -23,7 +23,7 @@ const userSchema = new Schema(
     favoriteBuilds: [{ type: Schema.Types.ObjectId, ref: 'Set' }],
     profilePicture: {
       type: String,
-      default: '../images/default-minifig.jpg'
+      default: '/images/default-minifig.jpg'
     }
   },
   {
