@@ -9,14 +9,23 @@ router.get("/profile", isLoggedIn, (req, res, next) => {
     Set.find().populate('creators')
     .then(foundSets => {
         console.log(req.session.currentUser);
-        const userSets = foundSets.filter(set => set.creators[0].username === req.session.currentUser.username)
+        const userSets = foundSets.filter(set => set.creators.username === req.session.currentUser.username)
         return res.render("user/profile", { userInSession: req.session.currentUser, mySets: userSets })
     })
     .catch(err => next(err));
     
 })
-router.get("/edit-profile", isLoggedIn, (req, res, next) => {
+router.get("/edit-profile/:id", isLoggedIn, (req, res, next) => {
+    const { id } = req.params; 
+    User.findById(id)
+    .then(user => {
+        return res.render("user/edit-user", {userInSession: user})
+    })
+    .catch(err => next(err));
+})
 
+router.post("/edit-profile/:id", (req, res, next) => {
+    
 })
 
 module.exports = router;

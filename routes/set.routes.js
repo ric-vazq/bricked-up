@@ -27,12 +27,51 @@ router.post("/create", fileUploader.single('set-image'), (req, res, next) => {
     .catch(err => next(err))
 })
 
+router.get("/fanmade", (req, res, next) => {
+    res.render("set/fanmade")
+})
+
+router.get("/official", (req, res, next) => {
+    res.render("set/official")
+})
+
 router.get("/info/:id", (req, res, next) => {
     const { id } = req.params; 
     Set.findById(id)
         .populate('parts')
-        .then(set => res.render("set/info", {userInSession: req.session.currentUser}))
+        .then(setInfo => {
+            return res.render("set/info", {userInSession: req.session.currentUser, set: setInfo})
+        })
         .catch(err => next(err));
+})
+
+router.get("/info/:id/edit", (req, res, next) => {
+    const { id } = req.params; 
+    let setFound;
+    Set.findById(id)
+    .then(set => {
+        setFound = set; 
+        return Part.find();
+    })
+    .then(allParts => {
+        return res.render("set/edit", {set: setFound, parts: allParts, userInSession: req.session.currentUser})
+    })
+})
+
+router.post("/info/:id/edit", fileUploader.single('set-image'), (req, res, next) => {
+    const { id } = req.params;
+    const { name, parts, existingImage, instructions } = req.body; 
+
+    let imgUrl;
+    if (req.file) {
+        imgUrl = req.file.path;
+    } else {
+        imgUrl = existingImage;
+    }
+
+    Set.findByIdAndUpdate(id, { name, parts, imgUrl, instructions }, { new: true })
+    .then(x => res.redirect(`/user/profile`))
+    .catch(err => next(err));
 })
 
 router.post("/info/:id/delete", (req, res, next) => {

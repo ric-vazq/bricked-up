@@ -9,7 +9,7 @@ const setSchema = new Schema ({
         type: String
     },
     parts: [{ type: Schema.Types.ObjectId, ref: 'Part' }],
-    creators: [{ type: Schema.Types.ObjectId, ref: 'User'}],
+    creators: { type: Schema.Types.ObjectId, ref: 'User'},
     instructions: {
         type: String
     }

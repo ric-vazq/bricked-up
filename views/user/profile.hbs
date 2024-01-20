@@ -5,7 +5,7 @@
         <div class="card-body mb-4 p-5 rounded-3 bg-danger shadow-sm">
             <img class="img-thumbnail border-3 border-dark rounded-circle" src="{{userInSession.profilePicture}}" style="height: 100px; width: 100px" alt="">
             <h2>Welcome, {{ userInSession.username }}!</h2>
-            <button class="btn btn-dark rounded-pill border-3 border-warning"><a class="nav-link" href="/user/edit-profile">Edit Profile</a></button>
+            <button class="btn btn-dark rounded-pill border-3 border-warning"><a class="nav-link" href="/user/edit-profile/{{userInSession._id}}">Edit Profile</a></button>
         </div>
     </div>
     <div class="col">
