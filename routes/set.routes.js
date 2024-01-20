@@ -32,9 +32,9 @@ router.get("/fanmade", (req, res, next) => {
     Set.find()
     .then(setDisplay => {
         console.log(setDisplay)
-        res.render("set/fanmade",{setDisplay})
+        res.render("set/fanmade",{setDisplay:setDisplay,userInSession:req.session.currentUser})
     })
-    res.render("set/fanmade")
+    
 })
 
 router.get("/official", (req, res, next) => {
