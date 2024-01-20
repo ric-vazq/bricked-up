@@ -29,6 +29,11 @@ router.post("/create", fileUploader.single('set-image'), (req, res, next) => {
 })
 
 router.get("/fanmade", (req, res, next) => {
+    Set.find()
+    .then(setDisplay => {
+        console.log(setDisplay)
+        res.render("set/fanmade",{setDisplay})
+    })
     res.render("set/fanmade")
 })
 

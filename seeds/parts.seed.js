@@ -19,7 +19,7 @@ mongoose
     .connect(process.env.MONGODB_URI)
     .then((x) => {
         console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
-        return axios.get(`https://rebrickable.com/api/v3/lego/sets/11001-1/parts/?key=7412840ee8015bc8eed2f0b3dde0a1ec`);
+        return axios.get(`https://rebrickable.com/api/v3/lego/sets/11011-1/parts/?key=7412840ee8015bc8eed2f0b3dde0a1ec`);
     })
     .then(APIResponse => {
         let newData = onSuccess(APIResponse.data.results);
