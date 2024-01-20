@@ -2,7 +2,7 @@ const axios = require("axios");
 const mongoose = require('mongoose');
 const Part = require("../models/Part.model")
 
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/bricked-up";
+const MONGO_URI = process.env.MONGODB_URI ;
 
 onSuccess = (array) => {
     let newArray = [];
