@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User.model")
 const Set = require("../models/Set.model");
 const Part = require("../models/Part.model");
+const OfficialSet = require("../models/OfficialSet.model")
 const isLoggedIn = require("../middleware/isLoggedIn");
 const fileUploader = require('../config/cloudinary');
 
@@ -32,7 +33,11 @@ router.get("/fanmade", (req, res, next) => {
 })
 
 router.get("/official", (req, res, next) => {
-    res.render("set/official")
+    OfficialSet.find()
+    .then(foundSets => {
+        console.log(foundSets)
+        res.render("set/official", { foundSets })
+    })
 })
 
 router.get("/info/:id", (req, res, next) => {

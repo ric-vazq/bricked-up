@@ -1,3 +1,4 @@
+require("dotenv").config()
 const axios = require("axios");
 const mongoose = require('mongoose');
 const OfficialSet = require("../models/OfficialSet.model")
@@ -14,7 +15,7 @@ onSuccess = (array) => {
         let setUrl = array[i].set_url;
 
 
-        newArray.push({name: nm, numParts: prtsNum, year:yr, imgUrl: imageUrl, set_Url:setUrl})
+        newArray.push({name: nm, partNum: prtsNum, year: yr, imgUrl: imageUrl, setUrl: setUrl})
     }
     return newArray
 }
@@ -30,7 +31,7 @@ mongoose
         return OfficialSet.insertMany(newData)
     })
     .then(OfficialSetList => {
-        console.log("sets added: ", OfficialSetList);
+        console.log("Sets added: ", OfficialSetList);
         return mongoose.connection.close();
     })
     .catch(err => {
