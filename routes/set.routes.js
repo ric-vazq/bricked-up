@@ -27,6 +27,14 @@ router.post("/create", fileUploader.single('set-image'), (req, res, next) => {
     .catch(err => next(err))
 })
 
+router.get("/fanmade", (req, res, next) => {
+    res.render("set/fanmade")
+})
+
+router.get("/official", (req, res, next) => {
+    res.render("set/official")
+})
+
 router.get("/info/:id", (req, res, next) => {
     const { id } = req.params; 
     Set.findById(id)
