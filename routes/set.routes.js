@@ -10,7 +10,7 @@ const fileUploader = require('../config/cloudinary');
 router.get("/create", isLoggedIn, (req, res, next) => {
     Part.find()
     .then(parts => {
-        return res.render("set/create", { parts: parts })
+        return res.render("set/create", { userInSession: req.session.currentUser, parts: parts })
     })
     .catch(err => next(err));
 })
@@ -19,7 +19,7 @@ router.post("/create", fileUploader.single('set-image'), isLoggedIn, (req, res, 
     const { name, parts, creators, instructions } = req.body;
     Set.create({ name, parts, creators, instructions, imgUrl: req.file.path })
     .then(newSet => {
-        console.log("New Set:", newSet);
+        console.log("New Set:", creators);
         return User.findById( creators );
     })
     .then(x => {
@@ -29,7 +29,7 @@ router.post("/create", fileUploader.single('set-image'), isLoggedIn, (req, res, 
 })
 
 router.get("/fanmade", (req, res, next) => {
-    Set.find()
+    Set.find().populate('creators')
     .then(setDisplay => {
         console.log(setDisplay)
         res.render("set/fanmade",{setDisplay:setDisplay,userInSession:req.session.currentUser})
