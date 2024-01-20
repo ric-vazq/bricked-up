@@ -3,8 +3,6 @@ const axios = require("axios");
 const mongoose = require('mongoose');
 const Part = require("../models/Part.model")
 
-const MONGO_URI = process.env.MONGODB_URI ;
-
 onSuccess = (array) => {
     let newArray = [];
     for (let i = 0; i < array.length; i++) {
