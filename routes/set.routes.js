@@ -10,12 +10,12 @@ const fileUploader = require('../config/cloudinary');
 router.get("/create", isLoggedIn, (req, res, next) => {
     Part.find()
     .then(parts => {
-        return res.render("set/create", { userInSession: req.session.currentUser, parts: parts })
+        return res.render("set/create", { parts: parts })
     })
     .catch(err => next(err));
 })
 
-router.post("/create", fileUploader.single('set-image'), (req, res, next) => {
+router.post("/create", fileUploader.single('set-image'), isLoggedIn, (req, res, next) => {
     const { name, parts, creators, instructions } = req.body;
     Set.create({ name, parts, creators, instructions, imgUrl: req.file.path })
     .then(newSet => {
@@ -35,8 +35,7 @@ router.get("/fanmade", (req, res, next) => {
 router.get("/official", (req, res, next) => {
     OfficialSet.find()
     .then(foundSets => {
-        console.log(foundSets)
-        res.render("set/official", { foundSets })
+        res.render("set/official", { foundSets: foundSets, userInSession: req.session.currentUser })
     })
 })
 
