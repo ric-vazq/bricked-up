@@ -19,9 +19,13 @@ router.get("/edit-profile/:id", isLoggedIn, (req, res, next) => {
     const { id } = req.params; 
     User.findById(id)
     .then(user => {
-        return res.render("user/edit-user", user)
+        return res.render("user/edit-user", {userInSession: user})
     })
     .catch(err => next(err));
+})
+
+router.post("/edit-profile/:id", (req, res, next) => {
+    
 })
 
 module.exports = router;

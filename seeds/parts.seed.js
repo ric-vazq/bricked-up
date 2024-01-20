@@ -1,8 +1,7 @@
+require("dotenv").config();
 const axios = require("axios");
 const mongoose = require('mongoose');
 const Part = require("../models/Part.model")
-
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/bricked-up";
 
 onSuccess = (array) => {
     let newArray = [];
@@ -17,7 +16,7 @@ onSuccess = (array) => {
 }
 
 mongoose
-    .connect(MONGO_URI)
+    .connect(process.env.MONGODB_URI)
     .then((x) => {
         console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
         return axios.get(`https://rebrickable.com/api/v3/lego/sets/11001-1/parts/?key=7412840ee8015bc8eed2f0b3dde0a1ec`);
