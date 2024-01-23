@@ -6,6 +6,7 @@ const Part = require("../models/Part.model");
 const OfficialSet = require("../models/OfficialSet.model")
 const isLoggedIn = require("../middleware/isLoggedIn");
 const fileUploader = require('../config/cloudinary');
+const isCreator = require("../middleware/isCreator");
 
 router.get("/create", isLoggedIn, (req, res, next) => {
     Part.find()
@@ -54,7 +55,7 @@ router.get("/info/:id", (req, res, next) => {
         .catch(err => next(err));
 })
 
-router.get("/info/:id/edit", (req, res, next) => {
+router.get("/info/:id/edit", isCreator, (req, res, next) => {
     const { id } = req.params; 
     let setFound;
     Set.findById(id)
@@ -83,7 +84,7 @@ router.post("/info/:id/edit", fileUploader.single('set-image'), (req, res, next)
     .catch(err => next(err));
 })
 
-router.post("/info/:id/delete", (req, res, next) => {
+router.post("/info/:id/delete", isCreator, (req, res, next) => {
     const { id } = req.params; 
     Set.findByIdAndDelete(id)
     .then(() => res.redirect("/user/profile"))
