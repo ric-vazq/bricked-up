@@ -14,6 +14,8 @@ const User = require("../models/User.model");
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
+const transporter  = require("../config/transporter");
+const { token } = require("morgan");
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
@@ -21,8 +23,14 @@ router.get("/signup", isLoggedOut, (req, res) => {
 });
 
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res) => {
+router.post("/signup", isLoggedOut, async (req, res, next) => {
   const { username, email, password } = req.body;
+
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let token = '';
+  for (let i = 0; i < 25; i++) {
+    token += characters[Math.floor(Math.random() * characters.length)];
+  }  
 
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
@@ -30,7 +38,6 @@ router.post("/signup", isLoggedOut, (req, res) => {
       errorMessage:
         "All fields are mandatory. Please provide your username, email and password.",
     });
-
     return;
   }
 
@@ -42,7 +49,6 @@ router.post("/signup", isLoggedOut, (req, res) => {
     return;
   }
 
-  //   ! This regular expression checks password for special characters and minimum length
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!regex.test(password)) {
     res
@@ -53,29 +59,40 @@ router.post("/signup", isLoggedOut, (req, res) => {
     return;
   }
 
-  // Create a new user - start by hashing the password
   bcrypt
-    .genSalt(saltRounds)
-    .then((salt) => bcrypt.hash(password, salt))
-    .then((hashedPassword) => {
-      // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword });
-    })
-    .then((user) => {
-      res.redirect("/auth/login");
-    })
-    .catch((error) => {
-      if (error instanceof mongoose.Error.ValidationError) {
-        res.status(500).render("auth/signup", { errorMessage: error.message });
-      } else if (error.code === 11000) {
-        res.status(500).render("auth/signup", {
-          errorMessage:
-            "Username and email need to be unique. Provide a valid username or email.",
-        });
-      } else {
-        next(error);
-      }
-    });
+  .genSalt(saltRounds)
+  .then(salt => bcrypt.hash(password, salt))
+  .then(hashedPassword => {
+    return User.create({ username, email, password: hashedPassword, confirmationCode: token })
+  })
+  .then(user => {
+    transporter.sendMail({
+      from: 'Bricked Up',
+      to: user.email,
+      subject: 'Confirm your account by Bricked Up',
+      text: `Welcome ${user.username}, please verify your email by clicking the link below.`,
+      html: `
+      <html>
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+      </head>
+      <body>
+      <div class="container text-center">
+        <h2>Click the link to activate your account</h2> 
+        <a href="http://localhost:3000/auth/confirm/${user.confirmationCode}">Verify Account</a>
+      </div>
+      </body>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+      </html>
+      `
+      })
+    console.log("email sent successfully");
+    return res.redirect("/auth/login")
+  })  
 });
 
 // GET /auth/login
@@ -97,15 +114,12 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     return;
   }
 
-  // Here we use the same logic as above
-  // - either length based parameters or we check the strength of a password
   if (password.length < 6) {
     return res.status(400).render("auth/login", {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
   }
 
-  // Search the database for a user with the email submitted in the form
   User.findOne({ username })
     .then((user) => {
       // If the user isn't found, send an error message that user provided wrong credentials
@@ -113,6 +127,13 @@ router.post("/login", isLoggedOut, (req, res, next) => {
         res
           .status(400)
           .render("auth/login", { errorMessage: "Wrong credentials." });
+        return;
+      }
+
+      if (user.status === 'Pending Confirmation') {
+        res
+          .status(400)
+          .render("auth/login", {errorMessage: "Account hasn't been activated."})
         return;
       }
 
@@ -150,5 +171,21 @@ router.get("/logout", isLoggedIn, (req, res) => {
     res.redirect("/");
   });
 });
+
+router.get("/confirm/:confirmationCode", isLoggedOut, async (req, res, next) => {
+  const { confirmationCode } = req.params; 
+  const update = { status: 'Active'}
+  try {
+    let user = await User.findOneAndUpdate({ confirmationCode: confirmationCode }, update)
+    if (!user) {
+      res.redirect("/auth/signup")
+      return; 
+    }
+
+    return res.redirect("/auth/login")
+  } catch (error) {
+    next(error)
+  }
+})
 
 module.exports = router;
