@@ -8,6 +8,7 @@ module.exports = (req, res, next) => {
     .then(foundSet => {
         console.log(foundSet.creators);
         if (req.session.currentUser.username === foundSet.creators.username) {
+            res.locals.isUser;
             next();
         } else {
             res.redirect(`/set/info/${id}`)

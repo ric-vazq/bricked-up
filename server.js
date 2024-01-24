@@ -6,3 +6,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
+
+// "mongodb+srv://ric-vazq:3yinL4hiqhnegj0n@brickedup.wa1lhlb.mongodb.net/"
+//
