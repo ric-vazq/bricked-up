@@ -25,5 +25,16 @@
 .featurette-divider {
     margin: 5rem 0; 
 }
+.c-img {
+    height: 100%;
+    object-fit: cover;
 
+}
 
+.c-item{
+    height: 480px;
+}
+.txt-item {
+    -webkit-text-stroke-width:1px;
+    -webkit-text-stroke-color: red;
+}
