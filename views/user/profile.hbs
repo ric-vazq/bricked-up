@@ -5,13 +5,20 @@
         <div class="card-body mb-4 p-5 rounded-3 bg-danger shadow-sm">
             <img class="img-thumbnail border-3 border-dark rounded-circle" src="{{userInSession.profilePicture}}" style="height: 100px; width: 100px" alt="">
             <h2>Welcome, {{ userInSession.username }}!</h2>
-            <button class="btn btn-dark rounded-pill border-3 border-warning"><a class="nav-link" href="/user/edit-profile/{{userInSession._id}}">Edit Profile</a></button>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-dark rounded-pill border-3 border-warning"><a class="nav-link" href="/user/edit/{{userInSession._id}}">Edit Profile</a></button>
+                </div>
+                <div class="col-md-6">
+                    <form action="/user/delete/{{userInSession._id}}" method="POST"><button class="btn btn-warning rounded-pill border-3 border-dark">Delete</button></form>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col">
         <div class="card-body mb-4 p-5 rounded-3 bg-warning shadow-sm">
             <img class="img-thumbnail border-3 border-danger rounded-circle" src="/images/favicon.ico" style="height: 100px; width: 100px" alt="">
-            <h2>Feel Inspired?</h2>
+            <h2 class="">Feel Inspired?</h2>
             <button class="btn btn-danger rounded-pill border-3 border-dark"><a class="nav-link" href="/set/create">Add New Set</a></button>
         </div>
     </div>
