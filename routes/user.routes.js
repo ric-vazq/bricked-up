@@ -8,6 +8,8 @@ const Part = require("../models/Part.model")
 router.get("/profile", isLoggedIn, (req, res, next) => {
     Set.find().populate('creators')
     .then(foundSets => {
+        console.log(foundSets);
+        console.log(req.session.currentUser.username);
         const userSets = foundSets.filter(set => set.creators.username === req.session.currentUser.username)
         return res.render("user/profile", { userInSession: req.session.currentUser, mySets: userSets })
     })
