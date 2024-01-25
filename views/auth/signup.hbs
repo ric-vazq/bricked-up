@@ -32,6 +32,14 @@
           </span>
           <input class="form-control" type="password" id="password" name="password" placeholder="********" />
         </div>
+
+        <label class="form-label">Verify Password</label>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="bi bi-eye-slash-fill" id="togglePassword"></i>
+          </span>
+          <input class="form-control" type="password" id="passwordVerification" name="passwordVerification" placeholder="********" />
+        </div>
     
         {{#if errorMessage}}
         <p style="color: red">{{errorMessage}}</p>

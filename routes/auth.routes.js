@@ -25,7 +25,7 @@ router.get("/signup", isLoggedOut, (req, res) => {
 // POST /auth/signup
 router.post("/signup", isLoggedOut, async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, passwordVerification } = req.body;
     const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let token = '';
     for (let i = 0; i < 25; i++) {
@@ -36,7 +36,7 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
     if (foundUser) {
       return res.render("auth/signup", {errorMessage: "Username taken"});
     }
-    else if (username === "" || email === "" || password === "") {
+    else if (username === "" || email === "" || password === "" || passwordVerification === "") {
       res.status(400).render("auth/signup", {
         errorMessage:
           "All fields are mandatory. Please provide your username, email and password."});
@@ -51,6 +51,10 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
         .render("auth/signup", {
           errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter."});
       return;
+    } else if (password !== passwordVerification){
+      res.status(400).render("auth/signup", {
+        errorMessage: "The passwords weren't the same. Please verify that both are typed in identically."
+      })
     } else {
       const salt = await bcrypt.genSalt(saltRounds);
       const hashedPassword = await bcrypt.hash(password, salt);

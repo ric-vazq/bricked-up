@@ -54,6 +54,13 @@ router.post("/delete/:id", async (req, res, next) => {
         console.log("req.params", req.params);
         const { id } = req.params;
         let user = await User.findByIdAndDelete(id);
+        let allSets = await Set.find().populate('creators')
+        let userSets = await allSets.forEach( set => {
+            if (set.creators.username === user.username) {
+                Set.findByIdAndDelete(set._id)
+            }
+            return; 
+        })
         let logout = await req.session.destroy(err => {
             if (err) {
                 res.status(500).render("auth/logout", { errorMessage: err.message });
