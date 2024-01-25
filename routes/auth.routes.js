@@ -83,7 +83,7 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
       <body>
       <div class="container text-center">
         <h2>Click the link to activate your account</h2> 
-        <a href="http://localhost:3000/auth/confirm/${user.confirmationCode}">Verify Account</a>
+        <a href="https://bricked-up.onrender.com/auth/confirm/${user.confirmationCode}">Verify Account</a>
       </div>
       </body>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
