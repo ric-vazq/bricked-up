@@ -17,10 +17,12 @@
     transition: all 0.3s;
     
 }
-.card:hover{
+
+@media screen and (min-width:1200px) {
+.card :hover {
     transform: scale(1.15);
 }
-
+}
 
 .featurette-divider {
     margin: 5rem 0; 
@@ -28,6 +30,7 @@
 .c-img {
     height: 100%;
     object-fit: cover;
+    filter: brightness(0.6);
 
 }
 
