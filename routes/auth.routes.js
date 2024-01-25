@@ -24,75 +24,67 @@ router.get("/signup", isLoggedOut, (req, res) => {
 
 // POST /auth/signup
 router.post("/signup", isLoggedOut, async (req, res, next) => {
-  const { username, email, password } = req.body;
-
-  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let token = '';
-  for (let i = 0; i < 25; i++) {
-    token += characters[Math.floor(Math.random() * characters.length)];
-  }  
-
-  // Check that username, email, and password are provided
-  if (username === "" || email === "" || password === "") {
-    res.status(400).render("auth/signup", {
-      errorMessage:
-        "All fields are mandatory. Please provide your username, email and password.",
-    });
-    return;
-  }
-
-  if (password.length < 6) {
-    res.status(400).render("auth/signup", {
-      errorMessage: "Your password needs to be at least 6 characters long.",
-    });
-
-    return;
-  }
-
-  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  if (!regex.test(password)) {
-    res
-      .status(400)
-      .render("auth/signup", {
-        errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter."
-    });
-    return;
-  }
-
-  bcrypt
-  .genSalt(saltRounds)
-  .then(salt => bcrypt.hash(password, salt))
-  .then(hashedPassword => {
-    return User.create({ username, email, password: hashedPassword, confirmationCode: token })
-  })
-  .then(user => {
-    transporter.sendMail({
-      from: 'Bricked Up',
-      to: user.email,
-      subject: 'Confirm your account by Bricked Up',
-      text: `Welcome ${user.username}, please verify your email by clicking the link below.`,
-      html: `
-      <html>
-      <head>
+  try {
+    const { username, email, password } = req.body;
+    const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let token = '';
+    for (let i = 0; i < 25; i++) {
+      token += characters[Math.floor(Math.random() * characters.length)];
+    }
+    const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+    const foundUser = await User.findOne({ username });
+    if (foundUser) {
+      return res.render("auth/signup", {errorMessage: "Username taken"});
+    }
+    else if (username === "" || email === "" || password === "") {
+      res.status(400).render("auth/signup", {
+        errorMessage:
+          "All fields are mandatory. Please provide your username, email and password."});
+      return;
+    } else if (password.length < 6) {
+      res.status(400).render("auth/signup", {
+        errorMessage: "Your password needs to be at least 6 characters long."});
+      return;
+    } else if (!regex.test(password)) {
+      res
+        .status(400)
+        .render("auth/signup", {
+          errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter."});
+      return;
+    } else {
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const user = await User.create({ username, email, password: hashedPassword, confirmationCode: token})
+      const confirmMail = await transporter.sendMail({
+        from: 'Bricked Up',
+        to: user.email,
+        subject: 'Confirm your account by Bricked Up',
+        text: `Welcome ${user.username}, please verify your email by clicking the link below.`,
+        html: `
+        <html>
+        <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-      </head>
-      <body>
-      <div class="container text-center">
+        </head>
+        <body>
+        <div class="container text-center">
         <h2>Click the link to activate your account</h2> 
         <a href="https://bricked-up.onrender.com/auth/confirm/${user.confirmationCode}">Verify Account</a>
-      </div>
-      </body>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-      </html>
-      `
+        </div>
+        </body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        </html>
+        `
       })
-    console.log("email sent successfully");
-    return res.redirect("/auth/login")
-  })  
+      console.log(confirmMail);
+      return res.redirect("/auth/login")
+    }
+  } catch (error) {
+    next(error)
+  }
 });
 
 // GET /auth/login
@@ -101,7 +93,7 @@ router.get("/login", isLoggedOut, (req, res) => {
 });
 
 // POST /auth/login
-router.post("/login", isLoggedOut, (req, res, next) => {
+router.post("/login", isLoggedOut, async (req, res, next) => {
   const { username, password } = req.body;
 
   // Check that username, email, and password are provided
@@ -120,6 +112,13 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     });
   }
 
+  // let user = await User.findOne({ username })
+  // if (!user) {
+  //   res
+  //   .status(400)
+  //   .render("auth/login", { errorMessage: "Wrong credentials"})
+  // }
+
   User.findOne({ username })
     .then((user) => {
       // If the user isn't found, send an error message that user provided wrong credentials
@@ -129,7 +128,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           .render("auth/login", { errorMessage: "Wrong credentials." });
         return;
       }
-
+      // If the user hasn't activated their account then error message
       if (user.status === 'Pending Confirmation') {
         res
           .status(400)
