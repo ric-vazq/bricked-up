@@ -1,4 +1,4 @@
-![](../bricked-up/public/images/fontbolt.png)
+![](/images/fontbolt.png)
 
 [Visit our site!](https://bricked-up.onrender.com/)
 
@@ -19,10 +19,10 @@ Brckd Up is the site to store all of your favorite Lego Creations! Sign Up and s
 # Team!
 
 Ricardo Bonilla Vazquez
-![Github](https://github.com/ric-vazq)
-![LinkedIn](https://www.linkedin.com/in/ric-vazq/)
+[Github](https://github.com/ric-vazq)
+[LinkedIn](https://www.linkedin.com/in/ric-vazq/)
 
 
 Vitor Cruz
-![Github](https://github.com/Vitor193)
-![LinkedIn]()
+[Github](https://github.com/Vitor193)
+[LinkedIn]()
