@@ -32,11 +32,13 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
       token += characters[Math.floor(Math.random() * characters.length)];
     }
     const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-    const foundUser = await User.findOne({ username });
-    if (foundUser) {
+    const foundUsername = await User.findOne({ username });
+    const foundEmail = await User.findOne({ email })
+    if (foundUsername) {
       return res.render("auth/signup", {errorMessage: "Username taken"});
-    }
-    else if (username === "" || email === "" || password === "" || passwordVerification === "") {
+    } else if (foundEmail) {
+      return res.render("auth/signup", {errorMessage: "Email already in use"});
+    } else if (username === "" || email === "" || password === "" || passwordVerification === "") {
       res.status(400).render("auth/signup", {
         errorMessage:
           "All fields are mandatory. Please provide your username, email and password."});
